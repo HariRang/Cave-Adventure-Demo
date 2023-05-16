@@ -1,0 +1,209 @@
+"""for loop, array, function with parameters"""
+from os import system;
+from time import sleep;
+dialogueSpace = 0#4
+numLives = 5;
+listNumber = 1
+# inventory variables
+storyProgression = 0
+skip = False
+# where I use my list
+nameList = ["Emma", "Olivia", "Ashley", "Ava", "Sam", "Andrew", "Alex", "Jason"];
+responseList = ["Yes", "No"]
+storyListOne = ["Look for items", "Feel around for an exit", "Go further...", "Stay...", "Run and Hide", "Hold your Place"]
+inventoryList = []
+# main function where whole game starts
+def start():
+    name = chooseName();
+    endStory();
+    introduction(name);
+    endStory();
+    firstScenario(name, numLives);
+# draws lives onto screen
+def addLives(numLives):
+    if numLives > 0:
+        print("       " + " ┅ "*5);
+        print("Lives: " + ("┆X┆")*numLives + ("┆ ┆")*(5-numLives));
+        print("       " + " ┅ "*5);
+    else:
+        print("Lives: DEAD");
+# story end transition
+def endStory():
+    sleep(3);
+    system("clear");
+"""beginning of storyline"""
+# first part of story where name is chosen
+def chooseName():
+    addLives(numLives);
+    print("Choose your name for the story:");
+    # where I use my for loop
+    listNumber = 1
+    for i in range(8):
+        print(str(listNumber) + ". " + nameList[i]);
+        listNumber = listNumber+1
+    # user input to choose name
+    name = int(input("Enter number (1-8) to choose a name: "));
+    if name != 9:
+        while name < 1 or name > 8:
+            name = int(input("Enter number (1-8) to choose a name: "));
+            if name > 1 and name < 8:
+                break;
+        name = nameList[name-1];
+    else:
+        name = "John Pork"
+    print("Your name is " + name + ".");
+    return name;
+# takes care of inventory
+def accessInventory(name):
+    inInventory = ""
+    while inInventory.lower() != "y" or inInventory.lower() != "n":
+        inInventory = input("Access inventory (Y/N)? ")
+        if inInventory.lower() == "y" or inInventory.lower() == "n":
+            break;
+    if inInventory == "y":
+        openInventory(name);
+        inInventory = ""
+        while inInventory.lower() != "y":
+            inInventory = input("Exit Inventory (Y/N)? ")
+            if inInventory.lower() == "y":
+                break;
+    exitInventory(name);
+    inInventory = ""
+def openInventory(name):
+    system("clear")
+    print(name + "'s Backpack:")
+    if name == "John Pork":
+        print("Congrats! You found the easter egg.")
+    for item in inventoryList:
+        print(str(inventoryList.index(item)+1) + ". " + item) 
+def exitInventory(name):
+    system("clear")
+    if storyProgression == 1:
+        skip = True
+        firstScenario(name)
+        skip = False
+# second part of story where introduction takes place
+# where I use my parameter
+def introduction(name):
+    addLives(numLives)
+    print("Narrator: Hello, fellow explorer!")
+    sleep(dialogueSpace/2)
+    print("Narrator: Do you see those X's at the top of the screen? Well, my friend, those are the amount of lives you have.")
+    sleep(dialogueSpace)
+    print("Narrator: I'm guessing you know what happens when you lose all of them...")
+    sleep(dialogueSpace)
+    print("Narrator: Well, not to worry! I believe in your ability to stay alive, " + name + ".")
+    sleep(dialogueSpace)
+    print("Narrator: I wouldn't have chosen you for the adventure if I didn't know about your capabilities.")
+    sleep(dialogueSpace)
+    print('Narrator: And one more thing before I forget! To access your inventory, when possible, just enter "y" on your keyboard.')
+    sleep(dialogueSpace)
+    print("Narrator: Ready?")
+    listNumber = 1
+    for i in range(2):
+        print(str(listNumber) + ". " + responseList[i]);
+        listNumber = listNumber+1
+    response = 0
+    while response != 1 or response != 2:
+        response = int(input("Response 1 or 2? "));
+        if response == 1 or response == 2:
+            break;
+    if response == 1:
+            print("You: Yes")
+            sleep(dialogueSpace)
+            print("Narrator: Oh well then, let's not keep the others waiting!")
+    if response == 2:
+            print("You: No")
+            sleep(dialogueSpace)
+            print("Narrator: Oh really? C'mon, It's a once in a lifetime opportunity. Follow me.")
+# first scenario takes place in a cave
+def firstScenario(name, numLives):
+    #skip = True
+    storyProgression = 1
+    addLives(numLives)
+    if skip == False:
+        print("*you arrive at a cave and you decide to explore it...next thing you know, you're lost in the darkness*")
+        listNumber = 1
+        for i in range(2):
+            print(str(listNumber) + ". " + storyListOne[i]);
+            listNumber = listNumber+1
+        response = 0
+        while response != 1 or response != 2:
+            response = int(input("Action 1 or 2? "));
+            if response == 1 or response == 2:
+                break;
+        if response == 1:
+                sleep(dialogueSpace)
+                print("You look around the dark cave... you finally find your backpack in a corner")
+                inventoryList.append("Flashlight [ON]")
+                inventoryList.append("Water Canteen")
+                inventoryList.append("Pocket Knife")
+                accessInventory(name);
+        if response == 2:
+                sleep(dialogueSpace)
+                print("As you feel around for what feels like hours, you finally give up trying to find an exit")
+                print("You decide to look around the dark cave instead... you finally find your backpack in a corner")
+                inventoryList.append("Flashlight [ON]")
+                inventoryList.append("Water Canteen")
+                inventoryList.append("Pocket Knife")
+                accessInventory(name);
+    print("You're faced with a dillema. Should you risk going further down the cave and getting lost forever, or should you stay in place and hope for the best?")
+    listNumber = 1
+    for i in range(2, 4, 1):
+            print(str(listNumber) + ". " + storyListOne[i]);
+            listNumber = listNumber+1
+    response = 0
+    while response != 1 or response != 2:
+        response = int(input("Action 1 or 2? "));
+        if response == 1 or response == 2:
+            break;
+    if response == 1:
+            sleep(dialogueSpace)
+            print("Even with your flashlight, you barely find a dusty, wooden box.")
+            print("You open it and find a barely readable map of the maze-like cave.")
+            inventoryList.append("Dusty Map")
+            print("*Dusty Map added to inventory*")
+            accessInventory(name);
+            system("clear")
+            print("...end of demo...")
+    if response == 2:
+            sleep(dialogueSpace)
+            print("As you wait for what feels like hours, you find what looks like a pair of eyes in the darkness")
+            print("You quickly shine your flashlight at it while tightly gripping a pocket knife in your other hand")
+            sleep(0.5)
+            print("...")   
+            sleep(1)
+            print("It was a grizzly bear")
+            print("As it runs towards you, you think of two possible options. Run and hide or hold your place.")
+            listNumber = 1
+            for i in range(4, 6, 1):
+                print(str(listNumber) + ". " + storyListOne[i]);
+                listNumber = listNumber+1
+            response = 0
+            while response != 1 or response != 2:
+                response = int(input("Action 1 or 2? "));
+                if response == 1 or response == 2:
+                    break;
+            if response == 1:
+                print("The bear was quicker than you expected. Next thing you know, you're lying on the ground disemboweled.")
+                print("Your vision blurs and blacks out.")
+                numLives = numLives-numLives
+                addLives(numLives);
+                print("Click 'Run' to try again.")
+            if response == 2:
+                print("The bear starts to dash towards you as beads of sweat drip down your forehead.")
+                print("Right as the bear is about to grasp your neck with its jaws, you thrust the knife into its skull.")
+                print("The bear with one final burst of energy, slashes you across your chest and lays dead afterwards.")
+                print("Other than the gnash across your chest, the knife now lays on the ground unusable")
+                inventoryList.remove("Pocket Knife")
+                print("*Pocket Knife* removed from inventory*")
+                print("As you look for something to stop the bleeding, you find an old map laying on the ground")
+                inventoryList.append("Dusty Map")
+                print("*Dusty Map* added to inventory*")
+                numLives = numLives-2
+                addLives(numLives);
+                accessInventory(name);
+                system("clear")
+                print("...end of demo...")
+"""end of storyline"""
+start();
